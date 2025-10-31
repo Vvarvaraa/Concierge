@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Concierge</string>
+    <string name="welcome_title">Добро пожаловать — Консьерж</string>
+    <string name="welcome_subtitle">Введите номер комнаты и имя для быстрой авторизации</string>
+    <string name="room_hint">Номер комнаты</string>
+    <string name="first_name_hint">Имя</string>
+    <string name="last_name_hint">Фамилия</string>
+    <string name="continue_button">Продолжить</string>
+    <string name="test_db_button">Тест базы данных</string>
+
+    <string name="hotel_title">Отель Cortez</string>
+    <string name="concierge_online">Консьерж онлайн</string>
+    <string name="welcome_message">Добро пожаловать в отель Cortez! Чем я могу вам помочь сегодня?</string>
+    <string name="message_hint">Сообщение</string>
+    <string name="send_message">Отправить сообщение</string>
+    <string name="open_catalog">Открыть каталог</string>
+</resources>
