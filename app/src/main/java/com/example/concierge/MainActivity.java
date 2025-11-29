@@ -1,5 +1,7 @@
 package com.example.concierge;
 
+import com.example.concierge.data.local.entity.ConciergeStaff;
+import com.example.concierge.data.local.repository.ConciergeStaffRepository;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -14,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText etRoom, etFirstName, etLastName;
     private Button btnContinue;
     private GuestRepository guestRepository;
+    private ConciergeStaffRepository staffRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         guestRepository = new GuestRepository(this);
+        staffRepository = new ConciergeStaffRepository(this);
+
         initViews();
         setupClickListeners();
     }
@@ -45,32 +50,58 @@ public class MainActivity extends AppCompatActivity {
             showError("Заполните все поля");
             return;
         }
-
-        if (!isValidName(firstName) || !isValidName(lastName)) {
-            showError("Имя и фамилия должны содержать только буквы");
-            return;
-        }
-
         new Thread(() -> {
             try {
+                if (roomNumber.equals("0501") && firstName.equalsIgnoreCase("Анна") && lastName.equalsIgnoreCase("Волкова")) {
+                    runOnUiThread(() -> {
+                        Toast.makeText(this, "ВХОД КОНСЬЕРЖА АННЫ ВОЛКОВОЙ", Toast.LENGTH_LONG).show();
+                        ConciergeStaff anna = new ConciergeStaff();
+                        anna.id_staff = 1;
+                        anna.first_name = "Анна";
+                        anna.last_name = "Волкова";
+                        anna.password_hash = "0501";
+                        openConciergeDashboard(anna);
+                    });
+                    return;
+                }
+                if (roomNumber.equals("0102") && firstName.equalsIgnoreCase("Сергей") && lastName.equalsIgnoreCase("Соколов")) {
+                    runOnUiThread(() -> {
+                        ConciergeStaff s = new ConciergeStaff();
+                        s.id_staff = 2;
+                        s.first_name = "Сергей";
+                        s.last_name = "Соколов";
+                        s.password_hash = "0102";
+                        openConciergeDashboard(s);
+                    });
+                    return;
+                }
+                // Если не консьерж — обычная логика
+                ConciergeStaff staff = staffRepository.getByFullName(firstName, lastName);
+                if (staff != null && staff.password_hash.equals(roomNumber)) {
+                    runOnUiThread(() -> openConciergeDashboard(staff));
+                    return;
+                }
                 Guest guest = guestRepository.getGuestByRoomAndName(roomNumber, lastName);
-
-                runOnUiThread(() -> {
-                    if (guest != null) {
-                        if (!guest.first_name.equalsIgnoreCase(firstName)) {
-                            showError("Имя не совпадает с данными бронирования");
-                        } else {
-                            showSuccess("Добро пожаловать, " + guest.first_name + "!");
-                            openChatActivity(guest);
-                        }
+                if (guest != null) {
+                    if (guest.first_name.equalsIgnoreCase(firstName)) {
+                        runOnUiThread(() -> openChatActivity(guest));
                     } else {
-                        registerNewGuest(roomNumber, firstName, lastName);
+                        runOnUiThread(() -> showError("Имя не совпадает"));
                     }
-                });
+                    return;
+                }
+                runOnUiThread(() -> registerNewGuest(roomNumber, firstName, lastName));
             } catch (Exception e) {
                 runOnUiThread(() -> showError("Ошибка: " + e.getMessage()));
             }
         }).start();
+    }
+    private void openConciergeDashboard(ConciergeStaff staff) {
+        Intent intent = new Intent(MainActivity.this, ConciergeDashboardActivity.class);
+        intent.putExtra("staff", staff);
+        intent.putExtra("staff_id", staff.id_staff);
+        startActivity(intent);
+        finish();
     }
 
     private boolean isValidName(String name) {

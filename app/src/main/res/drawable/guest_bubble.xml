@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:left="12dp">
+    <!-- Основной пузырь -->
+    <item android:right="12dp">
         <shape android:shape="rectangle">
-            <solid android:color="@color/white" />
+            <solid android:color="@color/bordo" />
             <corners android:radius="20dp" />
         </shape>
     </item>
 
-    <item android:right="70dp">
+    <!-- Хвостик справа -->
+    <item android:left="70dp">
         <rotate
-            android:fromDegrees="45"
-            android:pivotX="0%"
+            android:fromDegrees="-45"
+            android:pivotX="100%"
             android:pivotY="0%">
             <shape android:shape="rectangle">
-                <solid android:color="@color/white" />
+                <solid android:color="@color/bordo" />
                 <size android:width="14dp" android:height="14dp" />
             </shape>
         </rotate>

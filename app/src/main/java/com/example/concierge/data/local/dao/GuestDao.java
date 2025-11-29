@@ -18,8 +18,8 @@ public interface GuestDao {
     @Query("SELECT * FROM guests WHERE id_guest = :id")
     Guest getById(int id);
 
-    @Query("SELECT * FROM guests WHERE room_number = :roomNumber AND last_name = :lastName")
-    Guest getByRoomAndName(String roomNumber, String lastName);
+    @Query("SELECT * FROM guests WHERE room_number = :room_number AND LOWER(last_name) = LOWER(:last_name) LIMIT 1")
+    Guest getByRoomAndName(String room_number, String last_name);
 
     @Query("SELECT * FROM guests ORDER BY created_at DESC")
     List<Guest> getAll();

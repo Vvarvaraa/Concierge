@@ -18,7 +18,6 @@ public class DatabaseClient {
                     @Override
                     public void onCreate(@androidx.annotation.NonNull SupportSQLiteDatabase db) {
                         super.onCreate(db);
-                        // Заполняем базу тестовыми данными при создании
                         initializeSampleData();
                     }
                 })

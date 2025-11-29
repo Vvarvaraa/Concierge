@@ -1,6 +1,8 @@
 package com.example.concierge.data.local;
 import com.example.concierge.data.local.entity.*;
 
+import java.util.List;
+
 public class DatabaseInitializer {
 
     public static void initializeSampleData(AppDatabase db) {
@@ -54,16 +56,14 @@ public class DatabaseInitializer {
     private static void initializeStaff(AppDatabase db) {
         if (db.conciergeStaffDao().getAvailableStaff().isEmpty()) {
             ConciergeStaff[] staff = {
-                    new ConciergeStaff("Анна Волкова", "anna@hotel.ru", "0501", true, null),
-                    new ConciergeStaff("Сергей Соколов", "sery@hotel.ru", "0102", true, null),
-                    new ConciergeStaff("Андрей Кинг", "andrew@hotel.ru", "1205", false, null),
-                    new ConciergeStaff("Елизавета Домашенко", "liza@hotel.ru", "2406", true, null)
-
-
+                    new ConciergeStaff("Анна", "Волкова", "0501", "anna@hotel.ru", true, null),
+                    new ConciergeStaff("Сергей", "Соколов", "0102", "sery@hotel.ru", true, null),
+                    new ConciergeStaff("Мария", "Нагих", "1205", "maria@hotel.ru", false, null),
+                    new ConciergeStaff("Елизавета", "Домашенко", "2406", "liza@hotel.ru", true, null)
             };
 
-            for (ConciergeStaff employee : staff) {
-                db.conciergeStaffDao().insert(employee);
+            for (ConciergeStaff s : staff) {
+                db.conciergeStaffDao().insert(s);
             }
         }
     }
@@ -72,10 +72,15 @@ public class DatabaseInitializer {
         if (db.guestDao().getAll().isEmpty()) {
             Guest[] guests = {
                     new Guest("101", "Ронан", "Амстронг", "+79161234567", "ru", new java.util.Date()),
+                    new Guest("101", "ронан", "амстронг", "+79161234567", "ru", new java.util.Date()),
                     new Guest("102", "Моника", "Бинг", "+79167654321", "ru", new java.util.Date()),
-                    new Guest("103", "Xander", "Knight", "+44123456789", "en", new java.util.Date()),
+                    new Guest("102", "моника", "бинг", "+79167654321", "ru", new java.util.Date()),
+                    new Guest("103", "Джереми", "Волков", "+44123456789", "ru", new java.util.Date()),
+                    new Guest("103", "джереми", "волков", "+44123456789", "ru", new java.util.Date()),
                     new Guest("201", "Анна", "Сидорова", "+79165554433", "ru", new java.util.Date()),
-                    new Guest("202", "Петр", "Кузнецов", "+79167778899", "ru", new java.util.Date())
+                    new Guest("201", "анна", "сидорова", "+79165554433", "ru", new java.util.Date()),
+                    new Guest("202", "Петр", "Кузнецов", "+79167778899", "ru", new java.util.Date()),
+                    new Guest("202", "петр", "кузнецов", "+79167778899", "ru", new java.util.Date())
             };
 
             for (Guest guest : guests) {
@@ -84,17 +89,19 @@ public class DatabaseInitializer {
         }
     }
     private static void initializeSampleMessages(AppDatabase db) {
-        if (db.chatMessageDao().getByGuest(1).isEmpty()) {
+        // Проверяем, есть ли уже сообщения у гостя с id_guest = 1
+        List<ChatMessage> existing = db.chatMessageDao().getMessagesByGuest(1L);
+        if (existing == null || existing.isEmpty()) {
             ChatMessage[] messages = {
-                    new ChatMessage(1, "bot", "Добро пожаловать в отель Cortez! Чем могу помочь?",
+                    new ChatMessage(1L, "concierge", "Добро пожаловать в отель Cortez! Чем могу помочь?",
                             new java.util.Date(System.currentTimeMillis() - 3600000), null),
-                    new ChatMessage(1, "guest", "Здравствуйте! Как заказать завтрак в номер?",
+                    new ChatMessage(1L, "guest", "Здравствуйте! Как заказать завтрак в номер?",
                             new java.util.Date(System.currentTimeMillis() - 1800000), null),
-                    new ChatMessage(1, "concierge", "Конечно! Откройте каталог услуг и выберите 'Еда и напитки'",
+                    new ChatMessage(1L, "concierge", "Конечно! Откройте каталог услуг и выберите 'Еда и напитки'",
                             new java.util.Date(System.currentTimeMillis() - 1200000), null),
-                    new ChatMessage(1, "guest", "Спасибо! А как работает служба уборки?",
+                    new ChatMessage(1L, "guest", "Спасибо! А как работает служба уборки?",
                             new java.util.Date(System.currentTimeMillis() - 600000), null),
-                    new ChatMessage(1, "concierge", "Уборка проводится ежедневно с 10:00 до 14:00. Нужна дополнительная уборка?",
+                    new ChatMessage(1L, "concierge", "Уборка проводится ежедневно с 10:00 до 14:00. Нужна дополнительная уборка?",
                             new java.util.Date(System.currentTimeMillis() - 300000), null)
             };
             for (ChatMessage message : messages) {

@@ -23,13 +23,17 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <ImageButton
-            android:id="@+id/btn_back_catalog"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:src="@drawable/left"
-            android:background="@android:color/transparent"
-            android:contentDescription="Назад"
-            android:layout_marginEnd="16dp"/>
+            android:id="@+id/leftbut"
+            android:layout_width="48dp"
+            android:layout_height="50dp"
+            android:background="@drawable/send_button_background"
+            android:contentDescription="@string/send_message"
+            android:importantForAccessibility="yes"
+            android:src="@drawable/button_left"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
 
         <TextView
             android:id="@+id/title_text"
@@ -38,7 +42,7 @@
             android:layout_weight="1"
             android:text="Еда и напитки в номер 🍴"
             android:textColor="@color/black"
-            android:textSize="18sp"
+            android:textSize="24sp"
             android:textStyle="bold"
             android:gravity="center"/>
     </LinearLayout>
@@ -1449,7 +1453,7 @@
                             android:id="@+id/btn_wine_pros"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Игристое вино Просекко"
+                            android:text="Игристое вино Prosecco"
                             android:textColor="@color/black"
                             android:textStyle="bold"
                             android:textSize="18sp"

@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Concierge</string>
     <string name="welcome_title">Добро пожаловать — Консьерж</string>
-    <string name="welcome_subtitle">Введите номер комнаты и имя для быстрой авторизации</string>
+    <string name="welcome_subtitle">Введите номер комнаты или пароль(для персонала)</string>
     <string name="room_hint">Номер комнаты</string>
     <string name="first_name_hint">Имя</string>
     <string name="last_name_hint">Фамилия</string>

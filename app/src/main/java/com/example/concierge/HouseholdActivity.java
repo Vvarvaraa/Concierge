@@ -2,6 +2,7 @@ package com.example.concierge;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.NestedScrollView;
+
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -13,7 +14,6 @@ import android.widget.Toast;
 import android.content.Intent;
 
 import com.example.concierge.data.local.entity.Guest;
-import com.example.concierge.data.local.repository.ChatMessageRepository;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,58 +21,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class FoodDrinksActivity extends AppCompatActivity {
+public class HouseholdActivity extends AppCompatActivity {
     private NestedScrollView menuScrollView;
     private HorizontalScrollView categoriesScrollView;
 
     private ImageButton btnBackCatalog;
-    private ChatMessageRepository repository;
     private Guest currentGuest;
 
     // Кнопки категорий
-    private Button btnBreakfast;
-    private Button btnMainCourses;
-    private Button btnDesserts;
-    private Button btnHotDrinks;
-    private Button btnJuiceWater;
-    private Button btnAlcohol;
+    private Button btnCleaning;
+    private Button btnStirka;
+    private Button btnRemont;
+    private Button btnForkids;
 
     // Кнопки элементов меню
-    private Button btnContinentalBreakfast;
-    private Button btnEnglishBreakfast;
-    private Button btnHealthyBreakfast;
-    private Button btnRusBreakfast;
-
-    private Button btnRibeyeSteak;
-    private Button btnSalmonPotatoes;
-    private Button btnKarbonara;
-    private Button btnPotatoesWithChiken;
-
-    private Button btnTiramicy;
-    private Button btnChocolateFondan;
-    private Button btnCheesecake;
-
-    private Button btnLatte;
-    private Button btnCappuccino;
-    private Button btnEspresso;
-    private Button btnRaf;
-    private Button btnBlTea;
-    private Button btnGrTea;
-    private Button btnEgTea;
-
-    private Button btnOrJuice;
-    private Button btnApJuice;
-    private Button btnNoncarWater;
-    private Button btnCarWater;
-
-    private Button btnChampBrut;
-    private Button btnWinePros;
-    private Button btnWinePingr;
-    private Button btnWineCabsauv;
-    private Button btnWinePnoir;
-    private Button btnAperolspr;
-    private Button btnMojito;
-    private Button btnFrench;
+    private Button btnDopclean;
+    private Button btnGeneralclean;
+    private Button btnStandarstirka;
+    private Button btnSrochstirka;
+    private Button btnRemontinroom;
+    private Button btnKidsbeds;
+    private Button btnChairkids;
 
     private List<String> selectedItems = new ArrayList<>();
     private Map<Button, TextView> categoryMap = new HashMap<>();
@@ -82,95 +51,71 @@ public class FoodDrinksActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fooddrink);
+        setContentView(R.layout.activity_household);
 
         currentGuest = (Guest) getIntent().getSerializableExtra("guest");
-        repository = new ChatMessageRepository(getApplication());
 
         initViews();
-
         setupClickListeners();
         setupMenuItemClickListeners();
         setupScrollViewListeners();
 
         loadInitialOrder(getIntent().getStringExtra("initial_order_text"));
-
-        setActiveButton(btnBreakfast);
+        setActiveButton(btnCleaning);
     }
 
     private void initViews() {
-        btnBackCatalog = findViewById(R.id.leftbut);
+        btnBackCatalog = findViewById(R.id.sendButton); // Исправлен ID
         menuScrollView = findViewById(R.id.menu_scroll_view);
         categoriesScrollView = findViewById(R.id.categories_scroll);
 
         // Кнопки категорий
-        btnBreakfast = findViewById(R.id.btn_breakfast);
-        btnMainCourses = findViewById(R.id.btn_main_courses);
-        btnDesserts = findViewById(R.id.btn_desserts);
-        btnHotDrinks = findViewById(R.id.btn_hot_drinks);
-        btnJuiceWater = findViewById(R.id.btn_juice_water);
-        btnAlcohol = findViewById(R.id.btn_alcohol);
+        btnCleaning = findViewById(R.id.btn_cleaning);
+        btnStirka = findViewById(R.id.btn_stirka);
+        btnRemont = findViewById(R.id.btn_remont);
+        btnForkids = findViewById(R.id.btn_forkids);
 
         // Привязка кнопок категорий к их заголовкам (TextView)
-        categoryMap.put(btnBreakfast, findViewById(R.id.section_breakfast));
-        categoryMap.put(btnMainCourses, findViewById(R.id.section_main_courses));
-        categoryMap.put(btnDesserts, findViewById(R.id.section_desserts));
-        categoryMap.put(btnHotDrinks, findViewById(R.id.section_hot_drinks));
-        categoryMap.put(btnJuiceWater, findViewById(R.id.section_juice_water));
-        categoryMap.put(btnAlcohol, findViewById(R.id.section_alcohol));
+        categoryMap.put(btnCleaning, findViewById(R.id.clean));
+        categoryMap.put(btnStirka, findViewById(R.id.stirkas));
+        categoryMap.put(btnRemont, findViewById(R.id.remonts));
+        categoryMap.put(btnForkids, findViewById(R.id.forkid));
 
         initMenuItemButtonsAndMap();
     }
 
     private void initMenuItemButtonsAndMap() {
-        // Завтраки
-        btnContinentalBreakfast = findViewById(R.id.btn_continental_breakfast);
-        btnEnglishBreakfast = findViewById(R.id.btn_english_breakfast);
-        btnHealthyBreakfast = findViewById(R.id.btn_healthy_breakfast);
-        btnRusBreakfast = findViewById(R.id.btn_rus_breakfast);
+        // Уборка
+        btnDopclean = findViewById(R.id.btn_dopclean);
+        btnGeneralclean = findViewById(R.id.btn_generalclean);
 
-        // Основные блюда
-        btnRibeyeSteak = findViewById(R.id.btn_ribeye_steak);
-        btnSalmonPotatoes = findViewById(R.id.btn_salmon_potatoes);
-        btnKarbonara = findViewById(R.id.btn_karbonara);
-        btnPotatoesWithChiken = findViewById(R.id.btn_potatoes_with_chiken);
+        // Стирка
+        btnStandarstirka = findViewById(R.id.btn_standarstirka);
+        btnSrochstirka = findViewById(R.id.btn_srochstirka);
 
-        // Десерты
-        btnTiramicy = findViewById(R.id.btn_tiramicy);
-        btnChocolateFondan = findViewById(R.id.btn_chocolate_fondan);
-        btnCheesecake = findViewById(R.id.btn_cheesecake);
+        // Ремонт
+        btnRemontinroom = findViewById(R.id.btn_remontinroom);
 
-        // Горячие напитки
-        btnLatte = findViewById(R.id.btn_latte);
-        btnCappuccino = findViewById(R.id.btn_cappuccino);
-        btnEspresso = findViewById(R.id.btn_espresso);
-        btnRaf = findViewById(R.id.btn_raf);
-        btnBlTea = findViewById(R.id.btn_bl_tea);
-        btnGrTea = findViewById(R.id.btn_gr_tea);
-        btnEgTea = findViewById(R.id.btn_eg_tea);
+        // Для детей
+        btnKidsbeds = findViewById(R.id.btn_kidsbeds);
+        btnChairkids = findViewById(R.id.btn_chairkids);
 
-        // Соки и вода
-        btnOrJuice = findViewById(R.id.btn_or_juice);
-        btnApJuice = findViewById(R.id.btn_ap_juice);
-        btnNoncarWater = findViewById(R.id.btn_noncar_water);
-        btnCarWater = findViewById(R.id.btn_car_water);
-
-        // Алкоголь
-        btnChampBrut = findViewById(R.id.btn_champ_brut);
-        btnWinePros = findViewById(R.id.btn_wine_pros);
-        btnWinePingr = findViewById(R.id.btn_wine_pingr);
-        btnWineCabsauv = findViewById(R.id.btn_wine_cabsauv);
-        btnWinePnoir = findViewById(R.id.btn_wine_pnoir);
-        btnAperolspr = findViewById(R.id.btn_aperolspr);
-        btnMojito = findViewById(R.id.btn_mojito);
-        btnFrench = findViewById(R.id.btn_french);
+        // Заполняем карту для поиска кнопок по тексту
+        if (btnDopclean != null) itemButtonMap.put(btnDopclean.getText().toString(), btnDopclean);
+        if (btnGeneralclean != null) itemButtonMap.put(btnGeneralclean.getText().toString(), btnGeneralclean);
+        if (btnStandarstirka != null) itemButtonMap.put(btnStandarstirka.getText().toString(), btnStandarstirka);
+        if (btnSrochstirka != null) itemButtonMap.put(btnSrochstirka.getText().toString(), btnSrochstirka);
+        if (btnRemontinroom != null) itemButtonMap.put(btnRemontinroom.getText().toString(), btnRemontinroom);
+        if (btnKidsbeds != null) itemButtonMap.put(btnKidsbeds.getText().toString(), btnKidsbeds);
+        if (btnChairkids != null) itemButtonMap.put(btnChairkids.getText().toString(), btnChairkids);
     }
+
     private void loadInitialOrder(String initialText) {
         if (initialText == null || initialText.isEmpty()) {
             return;
         }
 
-        String prefix = "Заказ блюд/напитков: ";
+        String prefix = "Заказ бытовых услуг: ";
         if (initialText.startsWith(prefix)) {
             String itemsString = initialText.substring(prefix.length()).trim();
 
@@ -178,16 +123,12 @@ public class FoodDrinksActivity extends AppCompatActivity {
                 return;
             }
 
-            // Разбиваем строку по запятой и пробелу
             List<String> parsedItems = Arrays.asList(itemsString.split(",\\s*"));
 
             for (String item : parsedItems) {
                 String itemName = item.trim();
                 if (!itemName.isEmpty()) {
-                    // Восстанавливаем выбранные элементы
                     selectedItems.add(itemName);
-
-                    // Обновляем внешний вид кнопки
                     Button button = itemButtonMap.get(itemName);
                     if (button != null) {
                         setButtonSelected(button, true);
@@ -196,6 +137,7 @@ public class FoodDrinksActivity extends AppCompatActivity {
             }
         }
     }
+
     private void setButtonSelected(Button button, boolean isSelected) {
         if (isSelected) {
             button.setBackgroundResource(R.drawable.rounded_dark_button);
@@ -209,12 +151,10 @@ public class FoodDrinksActivity extends AppCompatActivity {
     private void setupClickListeners() {
         btnBackCatalog.setOnClickListener(v -> onBackPressed());
 
-        btnBreakfast.setOnClickListener(v -> scrollToSection(btnBreakfast));
-        btnMainCourses.setOnClickListener(v -> scrollToSection(btnMainCourses));
-        btnDesserts.setOnClickListener(v -> scrollToSection(btnDesserts));
-        btnHotDrinks.setOnClickListener(v -> scrollToSection(btnHotDrinks));
-        btnJuiceWater.setOnClickListener(v -> scrollToSection(btnJuiceWater));
-        btnAlcohol.setOnClickListener(v -> scrollToSection(btnAlcohol));
+        btnCleaning.setOnClickListener(v -> scrollToSection(btnCleaning));
+        btnStirka.setOnClickListener(v -> scrollToSection(btnStirka));
+        btnRemont.setOnClickListener(v -> scrollToSection(btnRemont));
+        btnForkids.setOnClickListener(v -> scrollToSection(btnForkids));
     }
 
     private void setupMenuItemClickListeners() {
@@ -232,13 +172,12 @@ public class FoodDrinksActivity extends AppCompatActivity {
                 Toast.makeText(this, itemName + " добавлен в заказ", Toast.LENGTH_SHORT).show();
             }
         };
+
         Button[] menuButtons = {
-                btnContinentalBreakfast, btnEnglishBreakfast, btnHealthyBreakfast, btnRusBreakfast,
-                btnRibeyeSteak, btnSalmonPotatoes, btnKarbonara, btnPotatoesWithChiken,
-                btnTiramicy, btnChocolateFondan, btnCheesecake,
-                btnLatte, btnCappuccino, btnEspresso, btnRaf, btnBlTea, btnGrTea, btnEgTea,
-                btnOrJuice, btnApJuice, btnNoncarWater, btnCarWater,
-                btnChampBrut, btnWinePros, btnWinePingr, btnWineCabsauv, btnWinePnoir, btnAperolspr, btnMojito, btnFrench
+                btnDopclean, btnGeneralclean,
+                btnStandarstirka, btnSrochstirka,
+                btnRemontinroom,
+                btnKidsbeds, btnChairkids
         };
 
         for (Button button : menuButtons) {
@@ -251,7 +190,7 @@ public class FoodDrinksActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (!selectedItems.isEmpty()) {
-            String order = "Заказ блюд/напитков: " + String.join(", ", selectedItems);
+            String order = "Заказ бытовых услуг: " + String.join(", ", selectedItems);
             Intent resultIntent = new Intent();
             resultIntent.putExtra("final_message", order);
             setResult(RESULT_OK, resultIntent);

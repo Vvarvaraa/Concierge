@@ -20,14 +20,14 @@ public class ChatMessage {
     @PrimaryKey(autoGenerate = true)
     public int id_message;
 
-    public int id_guest;
+    public long id_guest;
     public String sender_type; // guest, bot, concierge
     public String message_text;
     public Date timestamp;
-    public Integer related_order_id; // Может быть null
+    public String related_order_id;
 
-    public ChatMessage(int id_guest, String sender_type, String message_text,
-                       Date timestamp, Integer related_order_id) {
+    public ChatMessage(long id_guest, String sender_type, String message_text,
+                       Date timestamp, String related_order_id) {
         this.id_guest = id_guest;
         this.sender_type = sender_type;
         this.message_text = message_text;
